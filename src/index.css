@@ -33,3 +33,6 @@ table {
   text-align: center;
   padding: 10px;
 }
+.search-bar {
+  width: 100%;
+}
