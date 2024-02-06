@@ -1,20 +1,13 @@
 import React, { useState } from "react";
+import Transactions from "./Transactions";
 
-function SearchBar() {
-  const [search, setSearch] = useState("");
-
-  function handleSearchInput(e) {
-    setSearch(e.target.value);
-  }
-
+function SearchBar({ onSearch }) {
   return (
     <div className="search-bar">
       <input
-        type="text"
+        onChange={onSearch}
         placeholder="Search transaction description..."
         style={{ width: "300px", margin: "0 auto" }}
-        value={search}
-        onChange={handleSearchInput}
       />
     </div>
   );

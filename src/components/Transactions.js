@@ -1,23 +1,36 @@
 import React, { useEffect, useState } from "react";
+import SearchBar from "./SearchBar";
 
-function Transactions({ search }) {
-  const [data, setData] = useState([]);
+function Transaction() {
+  const [transactions, setTransactions] = useState([]);
+  const [search, setSearch] = useState("");
+
+  function handleSearchInput(e) {
+    setSearch(e.target.value);
+  }
 
   useEffect(() => {
     fetch("http://localhost:8000/transactions")
       .then((res) => res.json())
-      .then((data) => setData(data));
-  }, []);
-
-  const filteredTransactions = data.filter((transaction) =>
-    transaction.description.includes(search)
-  );
-
-  // setData(filteredTransactions)
+      .then((transactions) => {
+        const dataToDisplay = transactions.filter((transaction) => {
+          /* */
+          if (search === "") {
+            return true;
+          } else {
+            return transaction.description
+              .toLowerCase()
+              .includes(search.toLowerCase());
+          }
+        });
+        setTransactions(dataToDisplay);
+      });
+  }, [search]);
 
   const borderStyle = { border: "1px solid black" };
   return (
     <>
+      <SearchBar onSearch={handleSearchInput} />
       <table>
         <thead>
           <th style={borderStyle}>ID</th>
@@ -27,13 +40,13 @@ function Transactions({ search }) {
           <th style={borderStyle}>Amount</th>
         </thead>
         <tbody>
-          {data.map((trans) => (
-            <tr key={trans.id}>
-              <td style={borderStyle}>{trans.id}</td>
-              <td style={borderStyle}>{trans.date}</td>
-              <td style={borderStyle}>{trans.description}</td>
-              <td style={borderStyle}>{trans.category}</td>
-              <td style={borderStyle}>{trans.amount}</td>
+          {transactions.map((transaction) => (
+            <tr key={transaction.id}>
+              <td style={borderStyle}>{transaction.id}</td>
+              <td style={borderStyle}>{transaction.date}</td>
+              <td style={borderStyle}>{transaction.description}</td>
+              <td style={borderStyle}>{transaction.category}</td>
+              <td style={borderStyle}>{transaction.amount}</td>
             </tr>
           ))}
         </tbody>
@@ -42,4 +55,4 @@ function Transactions({ search }) {
   );
 }
 
-export default Transactions;
+export default Transaction;

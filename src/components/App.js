@@ -1,7 +1,6 @@
 import React from "react";
-import Transactions from "./Transactions";
+import Transaction from "./Transactions";
 import Header from "./Header";
-import SearchBar from "./SearchBar";
 import AddTransaction from "./AddTransaction";
 
 function App() {
@@ -12,8 +11,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <SearchBar />
-      <Transactions />
+      <Transaction />
       <AddTransaction />
     </div>
   );
