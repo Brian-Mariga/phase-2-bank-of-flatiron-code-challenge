@@ -14,9 +14,10 @@ function AddTransaction({ addTransaction }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newTransaction = { ...formData, id: Date.now() };
+    const newTransaction = { ...formData };
     addTransaction(newTransaction);
     setFormData({
+      id: "",
       date: "",
       description: "",
       category: "",
@@ -27,8 +28,20 @@ function AddTransaction({ addTransaction }) {
   return (
     <div>
       <form id="form" onSubmit={handleSubmit}>
+        <label htmlFor="id">ID:</label>
+        <input
+          style={{ width: "30px" }}
+          type="number"
+          id="id"
+          value={formData.id}
+          onChange={handleChange}
+          placeholder="id"
+          required
+          title="Please enter the id"
+        />
         <label htmlFor="date">Date:</label>
         <input
+          style={{ width: "100px" }}
           type="text"
           id="date"
           value={formData.date}
@@ -59,6 +72,15 @@ function AddTransaction({ addTransaction }) {
           title="Please enter the category of the transaction"
         />
         <label htmlFor="amount">Amount:</label>
+        <input
+          type="number"
+          id="amount"
+          value={formData.amount}
+          onChange={handleChange}
+          placeholder="Amount"
+          required
+          title="Please enter the amount"
+        />
 
         <button type="submit">Add Transaction</button>
       </form>
