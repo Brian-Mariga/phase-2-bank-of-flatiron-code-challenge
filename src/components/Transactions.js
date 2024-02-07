@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
+import AddTransaction from "./AddTransaction";
 
 function Transaction() {
   const [transactions, setTransactions] = useState([]);
   const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    fetch("http://localhost:8000/transactions")
+      .then((res) => res.json())
+      .then((data) => {
+        setTransactions(data);
+      });
+  }, []);
+
   function handleSearchInput(e) {
     setSearch(e.target.value);
   }
 
-  useEffect(() => {
-    fetch("http://localhost:8000/transactions")
-      .then((res) => res.json())
-      .then((transactions) => {
-        const dataToDisplay = transactions.filter((transaction) => {
-          if (search === "") {
-            return true;
-          } else {
-            return transaction.description
-              .toLowerCase()
-              .includes(search.toLowerCase());
-          }
-        });
-        setTransactions(dataToDisplay);
-      });
-  }, [search]);
+  function addTransaction(newTransaction) {
+    setTransactions([...transactions, newTransaction]);
+  }
+
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.description.toLowerCase().includes(search.toLowerCase())
+  );
 
   const borderStyle = { border: "1px solid black" };
   return (
@@ -32,14 +32,16 @@ function Transaction() {
       <SearchBar onSearch={handleSearchInput} />
       <table>
         <thead>
-          <th style={borderStyle}>ID</th>
-          <th style={borderStyle}>Date</th>
-          <th style={borderStyle}>Description</th>
-          <th style={borderStyle}>Category</th>
-          <th style={borderStyle}>Amount</th>
+          <tr>
+            <th style={borderStyle}>ID</th>
+            <th style={borderStyle}>Date</th>
+            <th style={borderStyle}>Description</th>
+            <th style={borderStyle}>Category</th>
+            <th style={borderStyle}>Amount</th>
+          </tr>
         </thead>
         <tbody>
-          {transactions.map((transaction) => (
+          {filteredTransactions.map((transaction) => (
             <tr key={transaction.id}>
               <td style={borderStyle}>{transaction.id}</td>
               <td style={borderStyle}>{transaction.date}</td>
@@ -50,6 +52,7 @@ function Transaction() {
           ))}
         </tbody>
       </table>
+      <AddTransaction addTransaction={addTransaction} />
     </>
   );
 }

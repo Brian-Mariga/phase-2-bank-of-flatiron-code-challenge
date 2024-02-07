@@ -1,10 +1,27 @@
 import React, { useState } from "react";
 
-function AddTransaction() {
+function AddTransaction({ addTransaction }) {
+  const [formData, setFormData] = useState({
+    date: "",
+    description: "",
+    category: "",
+    amount: "",
+  });
 
+  function handleChange(e) {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
+    const newTransaction = { ...formData, id: Date.now() };
+    addTransaction(newTransaction);
+    setFormData({
+      date: "",
+      description: "",
+      category: "",
+      amount: "",
+    });
   }
 
   return (
@@ -14,6 +31,8 @@ function AddTransaction() {
         <input
           type="text"
           id="date"
+          value={formData.date}
+          onChange={handleChange}
           placeholder="yyyy-mm-dd"
           pattern="\d{4}-\d{2}-\d{2}"
           required
@@ -23,6 +42,8 @@ function AddTransaction() {
         <input
           type="text"
           id="description"
+          value={formData.description}
+          onChange={handleChange}
           placeholder="Description"
           required
           title="Please enter the description of the transaction"
@@ -31,21 +52,15 @@ function AddTransaction() {
         <input
           type="text"
           id="category"
+          value={formData.category}
+          onChange={handleChange}
           placeholder="Category"
           required
           title="Please enter the category of the transaction"
         />
         <label htmlFor="amount">Amount:</label>
-        <input
-          type="number"
-          id="amount"
-          placeholder="Amount"
-          required
-          title="Please enter the amount"
-        />
 
         <button type="submit">Add Transaction</button>
-        <button type="submit">Clear</button>
       </form>
     </div>
   );
