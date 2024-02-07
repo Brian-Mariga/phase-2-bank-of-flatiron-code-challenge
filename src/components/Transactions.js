@@ -14,7 +14,6 @@ function Transaction() {
       .then((res) => res.json())
       .then((transactions) => {
         const dataToDisplay = transactions.filter((transaction) => {
-          /* */
           if (search === "") {
             return true;
           } else {
